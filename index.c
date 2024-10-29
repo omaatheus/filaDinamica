@@ -60,13 +60,26 @@ int inserirNaFila(Fila *fila, void *elemento) {
     return 1;  // retorna 1 para indicar sucesso
 }
 
+// função para remover um elemento do início da fila
+void* removerDaFila(Fila *fila) {
+    if (fila->tamanho == 0) {  // verifica se a fila está vazia
+        return NULL;  // retorna NULL se a fila estiver vazia
+    }
+
+    void *itemRemovido = fila->dados[fila->inicio];  // armazena o item a ser removido
+    fila->inicio = (fila->inicio + 1) % fila->capacidade;  // move o índice de início para o próximo
+    fila->tamanho--;  // diminui o tamanho da fila
+
+    return itemRemovido;  // retorna o item removido
+}
+
 // função para exibir o conteúdo da fila
 void imprimirFila(Fila *fila) {
     printf("Fila: ");
     for (int i = 0; i < fila->tamanho; i++) {          // percorre os elementos atuais na fila
         int index = (fila->inicio + i) % fila->capacidade;  // calcula o índice usando o índice circular
         if (fila->dados[index] != NULL) {                   // verifica se o dado não é NULL
-            printf("%p ", fila->dados[index]);              // exibe o endereço do elemento
+            printf("%d ", *(int*)fila->dados[index]);       // exibe o valor do elemento
         }
     }
     printf("\nCapacidade: %d, Tamanho: %d, Inicio: %d, Fim: %d\n",
@@ -86,6 +99,26 @@ int main() {
         inserirNaFila(fila, &elementos[i]);  // chama a função de inserção
         printf("Inserindo elemento %d na fila:\n", elementos[i]);  // exibe o valor inserido
         imprimirFila(fila);  // chama a função de impressão para ver o estado atual da fila
+    }
+
+    // Testando a remoção de elementos
+    printf("\nRemovendo elementos da fila:\n");
+    for (int i = 0; i < 5; i++) {
+        void *item = removerDaFila(fila);  // chama a função de remoção
+        if (item != NULL) {
+            printf("Elemento removido: %d\n", *(int*)item);  // exibe o elemento removido
+        } else {
+            printf("Fila vazia, nada a remover.\n");
+        }
+        imprimirFila(fila);  // chama a função de impressão para ver o estado atual da fila
+    }
+
+    // Testando o redimensionamento
+    printf("\nTestando o redimensionamento da fila:\n");
+    for (int i = 60; i < 70; i++) {
+        inserirNaFila(fila, &i);  // insere novos elementos para testar o redimensionamento
+        printf("Inserindo elemento %d na fila:\n", i);
+        imprimirFila(fila);
     }
 
     free(fila->dados);  // libera a memória alocada para os dados da fila
