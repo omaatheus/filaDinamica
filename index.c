@@ -94,34 +94,36 @@ int main() {
         return 1;                              // retorna 1 para indicar erro
     }
 
-    int elementos[] = {10, 20, 30, 40, 50};  // define alguns elementos para inserir na fila
-    for (int i = 0; i < 5; i++) {            // insere cada elemento no array
-        inserirNaFila(fila, &elementos[i]);  // chama a função de inserção
-        printf("Inserindo elemento %d na fila:\n", elementos[i]);  // exibe o valor inserido
-        imprimirFila(fila);  // chama a função de impressão para ver o estado atual da fila
+    // insere elementos na fila e testa o redimensionamento automático
+    int elementos[] = {10, 20, 30, 40, 50};  
+    for (int i = 0; i < 5; i++) {              
+        inserirNaFila(fila, &elementos[i]);  
+        printf("Inserindo elemento %d na fila:\n", elementos[i]);  
+        imprimirFila(fila);  
     }
 
-    // Testando a remoção de elementos
+    //testa a remoção dos elementos da fila para verificar a operação de dequeue
     printf("\nRemovendo elementos da fila:\n");
     for (int i = 0; i < 5; i++) {
-        void *item = removerDaFila(fila);  // chama a função de remoção
+        void *item = removerDaFila(fila);  
         if (item != NULL) {
-            printf("Elemento removido: %d\n", *(int*)item);  // exibe o elemento removido
+            printf("Elemento removido: %d\n", *(int*)item);  
         } else {
             printf("Fila vazia, nada a remover.\n");
         }
-        imprimirFila(fila);  // chama a função de impressão para ver o estado atual da fila
+        imprimirFila(fila);  
     }
 
-    // Testando o redimensionamento
+    //testa o redimensionamento novamente com novos valores
     printf("\nTestando o redimensionamento da fila:\n");
     for (int i = 60; i < 70; i++) {
-        inserirNaFila(fila, &i);  // insere novos elementos para testar o redimensionamento
+        inserirNaFila(fila, &i);  
         printf("Inserindo elemento %d na fila:\n", i);
         imprimirFila(fila);
     }
 
-    free(fila->dados);  // libera a memória alocada para os dados da fila
-    free(fila);         // libera a memória alocada para a estrutura da fila
-    return 0;           // retorna 0 para indicar sucesso
+    // libera a memória alocada após o uso para evitar vazamento
+    free(fila->dados);  
+    free(fila);         
+    return 0;           
 }
